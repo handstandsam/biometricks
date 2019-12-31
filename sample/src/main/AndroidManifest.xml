@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.handstandsam.biometricks.sample">
+
+    <application
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/app_sample_code"
+        android:label="Biometricks Sample"
+        android:supportsRtl="true"
+        android:testOnly="false">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+    <!-- Permission to use BiometricPrompt -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
+
+    <!-- Permission to use Fingerprint -->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT" />
+</manifest>
