@@ -1,7 +1,13 @@
 # Biometricks - Tricks for Android Biometrics
 
-Provides the ability to detect the type of Biometric the device supports for better user messaging.
+**CURRENTLY IN ALPHA**
 
+Provides various hacks/tricks to help work with the AndroidX Biometric APIs.
+
+**Features:**
+* The ability to detect the type of Biometric the device supports for better user messaging.
+* Ability to detect the need to show a loading dialog for API 28.
+* 100% Kotlin API, no Java support is planned.
 
 <table>
 <tr>
@@ -17,17 +23,33 @@ Provides the ability to detect the type of Biometric the device supports for bet
 # Why?
 The [AndroidX Biometric Library](https://developer.android.com/jetpack/androidx/releases/biometric) doesn't tell you what type of Biometric feature the device has and will be used.  This library figures that out for you so you can create better user messaging than just "Biometric" in most cases.
 
-
 ## Usage
 ``` kotlin
 val biometricks = Biometricks.from(applicationContext)
 
-val userMessage = when (biometricks) {
+val biometricName = when (biometricks) {
     Face -> "Face"
     Fingerprint -> "Fingerprint"
     Iris -> "Iris"
     Unknown,
     Multiple -> "Biometric"
+}
+```
+
+## CryptoObject Required
+
+In order to correctly have the UI show the detected biometric type, we encourage you to use our helper functions.  It will require you to pass a `BiometricPrompt.CryptoObject`.
+
+``` kotlin
+Biometricks.showPrompt(
+    activity,
+    BiometricPromptInfo(
+        title = "Authenticate with $biometricName",
+        negativeButtonText = "Cancel",
+        cryptoObject = cryptoObject
+    )
+) { showLoading ->
+    // Show a loading view for API 28 issues if you want
 }
 ```
 
@@ -50,6 +72,10 @@ sealed class Biometricks {
     }
 }
 ```
+
+## Related Content
+* [Android Biometrics UX Guide – User Messaging](https://handstandsam.com/2020/01/03/android-biometrics-ux-guide-user-messaging/) by [@handstandsam](https://twitter.com/handstandsam)
+* [The Mess that is Android Biometrics](https://medium.com/@evantatarka/the-mess-that-is-android-biometrics-4def9e222c32) by [@evant](https://twitter.com/evantatarka)
 
 ## Contributors
 * [Sam Edwards](https://github.com/handstandsam)
