@@ -1,6 +1,6 @@
 # Biometricks - Tricks for Android Biometrics
 
-**CURRENTLY IN ALPHA**
+**CURRENTLY IN DEVELOPMENT**
 
 Provides various hacks/tricks to help work with the AndroidX Biometric APIs.
 
