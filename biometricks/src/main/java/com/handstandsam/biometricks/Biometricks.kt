@@ -162,9 +162,18 @@ sealed class Biometricks {
             showLoading: (Boolean) -> Unit
         ): BiometricPrompt.CryptoObject {
             val activity = fragment.requireActivity()
-            return showPrompt(activity, cryptoObject, promptInfo, showLoading)
+            
+            UiHelpers.ensureFocus(activity)
+
+            return UiHelpers.handleApi28Loading(activity, showLoading) {
+                suspendCoroutine<BiometricPrompt.CryptoObject> { continuation ->
+                    BiometricPrompt(
+                        fragment,
+                        ContextCompat.getMainExecutor(activity),
+                        AuthenticationCallbackWrapper(continuation)
+                    ).authenticate(promptInfo, cryptoObject)
+                }
+            }
         }
-
-
     }
 }

@@ -6,7 +6,7 @@ import androidx.biometric.BiometricPrompt
 /**
  * Error for when the biometric prompt fails for whatever reason.
  */
-data class BiometricException(
+class BiometricException(
     /**
      * The error code, see `BiometricPrompt.ERROR_*`
      */
