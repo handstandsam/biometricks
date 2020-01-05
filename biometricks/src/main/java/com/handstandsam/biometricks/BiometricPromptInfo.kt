@@ -18,10 +18,6 @@ class BiometricPromptInfo(
     /** Optional */
     val subtitle: String? = null,
     val description: String? = null,
+    val deviceCredentialAllowed: Boolean = false,
     val confirmationRequired: Boolean = true
-) {
-    /**
-     * We are going to forcing use of [BiometricPrompt.CryptoObject], so this MUST be false.
-     */
-    val deviceCredentialAllowed: Boolean = false
-}
+)
