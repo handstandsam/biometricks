@@ -7,6 +7,9 @@ import androidx.biometric.BiometricManager
 import com.handstandsam.biometricks.Biometricks
 
 
+/**
+ * Internal logic to compute the [Biometricks] type.
+ */
 internal class BiometricksHelper(context: Context) {
 
     /**
