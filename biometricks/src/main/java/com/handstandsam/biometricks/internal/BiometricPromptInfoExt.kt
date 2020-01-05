@@ -1,11 +1,12 @@
-package com.handstandsam.biometricks
+package com.handstandsam.biometricks.internal
 
 import androidx.biometric.BiometricPrompt
+import com.handstandsam.biometricks.BiometricPromptInfo
 
 /**
  * Takes our [BiometricPromptInfo] and converts to AndroidX [BiometricPrompt.PromptInfo]
  */
-fun BiometricPromptInfo.toAndroidX(): BiometricPrompt.PromptInfo {
+internal fun BiometricPromptInfo.toAndroidX(): BiometricPrompt.PromptInfo {
     val builder = BiometricPrompt.PromptInfo.Builder()
     builder.setTitle(title)
     builder.setNegativeButtonText(negativeButtonText)

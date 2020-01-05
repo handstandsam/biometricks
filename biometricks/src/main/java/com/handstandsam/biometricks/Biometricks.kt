@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import com.handstandsam.biometricks.internal.AuthenticationCallbackWrapper
 import com.handstandsam.biometricks.internal.BiometricksHelper
 import com.handstandsam.biometricks.internal.UiHelpers
+import com.handstandsam.biometricks.internal.toAndroidX
 import kotlin.coroutines.suspendCoroutine
 
 /**
