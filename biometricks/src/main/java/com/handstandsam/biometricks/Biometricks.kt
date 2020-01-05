@@ -39,14 +39,19 @@ sealed class Biometricks {
 
     companion object {
 
+        /** Allows us to cache an instance of this helper */
+        private var biometricksHelper: BiometricksHelper? = null
+
         /**
          * Allows a client to query the type of Biometrics available on the device.
          *
          * It is recommended that you cache this value as it will
          * not change over time, but it will be computed every time.
          */
+
         fun from(context: Context): Biometricks {
-            return BiometricksHelper(context).type
+            val biometricksHelper = biometricksHelper ?: BiometricksHelper(context)
+            return biometricksHelper.type
         }
     }
 }
