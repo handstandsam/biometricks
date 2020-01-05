@@ -4,7 +4,7 @@
 
 Provides various hacks/tricks to help work with the AndroidX Biometric APIs.
 
-Features:
+**Features:**
 * The ability to detect the type of Biometric the device supports for better user messaging.
 * Ability to detect the need to show a loading dialog for API 28.
 * 100% Kotlin API, no Java support is planned.
@@ -72,6 +72,10 @@ sealed class Biometricks {
     }
 }
 ```
+
+## Related Content
+* [Android Biometrics UX Guide – User Messaging](https://handstandsam.com/2020/01/03/android-biometrics-ux-guide-user-messaging/) by [@handstandsam](https://twitter.com/handstandsam)
+* [The Mess that is Android Biometrics](https://medium.com/@evantatarka/the-mess-that-is-android-biometrics-4def9e222c32) by [@evant](https://twitter.com/evantatarka)
 
 ## Contributors
 * [Sam Edwards](https://github.com/handstandsam)
