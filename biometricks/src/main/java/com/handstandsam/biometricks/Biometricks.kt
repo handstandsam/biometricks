@@ -99,7 +99,7 @@ sealed class Biometricks {
             promptInfo: BiometricPromptInfo,
             showLoading: (Boolean) -> Unit
         ): BiometricPrompt.CryptoObject {
-            return UiHelpers.handleApi28Loading(activity, showLoading) {
+            return UiHelpers.handleApi28LoadingAndEnsureFocus(activity, showLoading) {
                 suspendCoroutine<BiometricPrompt.CryptoObject> { continuation ->
                     BiometricPrompt(
                         activity,
@@ -150,7 +150,7 @@ sealed class Biometricks {
         ): BiometricPrompt.CryptoObject {
             val activity = fragment.requireActivity()
 
-            return UiHelpers.handleApi28Loading(activity, showLoading) {
+            return UiHelpers.handleApi28LoadingAndEnsureFocus(activity, showLoading) {
                 suspendCoroutine<BiometricPrompt.CryptoObject> { continuation ->
                     BiometricPrompt(
                         fragment,

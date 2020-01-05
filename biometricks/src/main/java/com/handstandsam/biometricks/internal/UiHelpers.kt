@@ -15,7 +15,7 @@ import kotlin.coroutines.suspendCoroutine
  */
 internal object UiHelpers {
 
-    internal suspend fun <T> handleApi28Loading(
+    internal suspend fun <T> handleApi28LoadingAndEnsureFocus(
         activity: Activity,
         showLoading: (Boolean) -> Unit,
         showPrompt: suspend () -> T
