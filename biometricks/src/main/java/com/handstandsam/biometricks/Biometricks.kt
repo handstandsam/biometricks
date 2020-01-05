@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentActivity
 import com.handstandsam.biometricks.internal.AuthenticationCallbackWrapper
 import com.handstandsam.biometricks.internal.BiometricksHelper
 import com.handstandsam.biometricks.internal.UiHelpers
+import com.handstandsam.biometricks.internal.toAndroidX
 import kotlin.coroutines.suspendCoroutine
 
 /**
@@ -74,11 +75,7 @@ sealed class Biometricks {
          *     try {
          *         val unlockedCryptObject = Biometricks.showPrompt(
          *             this@MainActivity,
-         *             lockedCryptoObject,
-         *             BiometricPrompt.PromptInfo.Builder()
-         *                 .setTitle(...)
-         *                 .setNegativeButtonText(...)
-         *                 .build()
+         *             biometricPromptInfo
          *         ) { showLoading -> progressBar.visibility = if (showLoading) View.VISIBLE else View.INVISIBLE }
          *
          *         // success
@@ -92,28 +89,23 @@ sealed class Biometricks {
          * ```
          *
          * @param activity The host activity.
-         * @param cryptoObject The [BiometricPrompt.CryptoObject] to unlock. This is always required
-         * as you many not get 'secure' biometrics if you don't include it.
-         * @param promptInfo The [BiometricPrompt.PromptInfo] to display in the prompt.
+         * @param biometricPromptInfo The [BiometricPromptInfo] to display in the prompt.
          * @param showLoading Callback to show/hide a loading indicator for when there's a delay
          * showing the prompt. This is only used on api 28 as after that it shows immediately.
          */
         @MainThread
         suspend fun showPrompt(
             activity: FragmentActivity,
-            cryptoObject: BiometricPrompt.CryptoObject,
-            promptInfo: BiometricPrompt.PromptInfo,
+            promptInfo: BiometricPromptInfo,
             showLoading: (Boolean) -> Unit
         ): BiometricPrompt.CryptoObject {
-            UiHelpers.ensureFocus(activity)
-
-            return UiHelpers.handleApi28Loading(activity, showLoading) {
+            return UiHelpers.handleApi28LoadingAndEnsureFocus(activity, showLoading) {
                 suspendCoroutine<BiometricPrompt.CryptoObject> { continuation ->
                     BiometricPrompt(
                         activity,
                         ContextCompat.getMainExecutor(activity),
                         AuthenticationCallbackWrapper(continuation)
-                    ).authenticate(promptInfo, cryptoObject)
+                    ).authenticate(promptInfo.toAndroidX(), promptInfo.cryptoObject)
                 }
             }
         }
@@ -131,10 +123,7 @@ sealed class Biometricks {
          *         val unlockedCryptObject = Biometricks.showPrompt(
          *             this@MainActivity,
          *             lockedCryptoObject,
-         *             BiometricPrompt.PromptInfo.Builder()
-         *                 .setTitle(...)
-         *                 .setNegativeButtonText(...)
-         *                 .build()
+         *             biometricPromptInfo
          *         ) { showLoading -> progressBar.visibility = if (showLoading) View.VISIBLE else View.INVISIBLE }
          *
          *         // success
@@ -148,30 +137,26 @@ sealed class Biometricks {
          * ```
          *
          * @param fragment The host fragment.
-         * @param cryptoObject The [BiometricPrompt.CryptoObject] to unlock. This is always required
          * as you many not get 'secure' biometrics if you don't include it.
-         * @param promptInfo The [BiometricPrompt.PromptInfo] to display in the prompt.
+         * @param biometricPromptInfo The [BiometricPromptInfo] to display in the prompt.
          * @param showLoading Callback to show/hide a loading indicator for when there's a delay
          * showing the prompt. This is only used on api 28 as after that it shows immediately.
          */
         @MainThread
         suspend fun showPrompt(
             fragment: Fragment,
-            cryptoObject: BiometricPrompt.CryptoObject,
-            promptInfo: BiometricPrompt.PromptInfo,
+            promptInfo: BiometricPromptInfo,
             showLoading: (Boolean) -> Unit
         ): BiometricPrompt.CryptoObject {
             val activity = fragment.requireActivity()
-            
-            UiHelpers.ensureFocus(activity)
 
-            return UiHelpers.handleApi28Loading(activity, showLoading) {
+            return UiHelpers.handleApi28LoadingAndEnsureFocus(activity, showLoading) {
                 suspendCoroutine<BiometricPrompt.CryptoObject> { continuation ->
                     BiometricPrompt(
                         fragment,
                         ContextCompat.getMainExecutor(activity),
                         AuthenticationCallbackWrapper(continuation)
-                    ).authenticate(promptInfo, cryptoObject)
+                    ).authenticate(promptInfo.toAndroidX(), promptInfo.cryptoObject)
                 }
             }
         }

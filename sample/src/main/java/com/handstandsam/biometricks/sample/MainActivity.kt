@@ -3,13 +3,12 @@ package com.handstandsam.biometricks.sample
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
-import androidx.biometric.BiometricPrompt
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.handstandsam.biometricks.BiometricException
+import com.handstandsam.biometricks.BiometricPromptInfo
 import com.handstandsam.biometricks.Biometricks
 import com.handstandsam.biometricks.Biometricks.Available
 import com.handstandsam.biometricks.Biometricks.Available.*
@@ -63,18 +62,19 @@ class MainActivity : FragmentActivity() {
             try {
                 val unlockedCryptoObject = Biometricks.showPrompt(
                     this@MainActivity,
-                    cryptoObject,
-                    BiometricPrompt.PromptInfo.Builder()
-                        .setTitle("Authenticate with $biometricName")
-                        .setNegativeButtonText("Cancel")
-                        .setDeviceCredentialAllowed(false)
-                        .build()
+                    BiometricPromptInfo(
+                        title = "Authenticate with $biometricName",
+                        negativeButtonText = "Cancel",
+                        cryptoObject = cryptoObject
+                    )
                 ) { showLoading ->
                     findViewById<View>(R.id.loading).visibility =
                         if (showLoading) View.VISIBLE else View.INVISIBLE
                 }
 
                 showToast("Succeeded")
+
+                // TODO Do something with unlocked CryptoObject here
             } catch (e: BiometricException) {
                 if (e.shouldShow) {
                     showToast("Error | Message: ${e.errString} | Code: ${e.code}")
