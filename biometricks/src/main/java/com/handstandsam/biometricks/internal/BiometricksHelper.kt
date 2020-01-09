@@ -53,7 +53,7 @@ internal class BiometricksHelper(context: Context) {
         when (biometricManager.canAuthenticate()) {
             BiometricManager.BIOMETRIC_SUCCESS,
             BiometricManager.BIOMETRIC_ERROR_NONE_ENROLLED -> when {
-                availableFeatures.isEmpty() -> Biometricks.None
+                availableFeatures.isEmpty() -> Biometricks.Available.Unknown
                 availableFeatures.size == 1 -> availableFeatures[0].type
                 else -> Biometricks.Available.Multiple
             }
