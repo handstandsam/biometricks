@@ -2,15 +2,23 @@ package com.handstandsam.biometricks.internal
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.hardware.fingerprint.FingerprintManager
 import android.os.Build
+import android.security.keystore.KeyGenParameterSpec
+import android.security.keystore.KeyProperties
+import android.util.Log
+import androidx.annotation.RequiresPermission
 import androidx.biometric.BiometricManager
 import com.handstandsam.biometricks.Biometricks
+import java.security.InvalidAlgorithmParameterException
+import java.security.KeyStore
+import javax.crypto.KeyGenerator
 
 
 /**
  * Internal logic to compute the [Biometricks] type.
  */
-internal class BiometricksHelper(context: Context) {
+internal class BiometricksHelper(private val context: Context) {
 
     /**
      * Used to query available features on the device.
@@ -76,6 +84,36 @@ internal class BiometricksHelper(context: Context) {
             } else {
                 false
             }
+        }
+    }
+
+    /**
+     * Check if the user can securely authenticate with biometrics.
+     */
+    fun canSecurelyAuthenticate(): Boolean {
+        if (Build.VERSION.SDK_INT < 28) {
+            // we only have fingerprint, checking if there are any enrolled fingerprints should be enough.
+            val service = (context.getSystemService(Context.FINGERPRINT_SERVICE) as FingerprintManager?)
+                ?: return false
+            return service.hasEnrolledFingerprints()
+        }
+        try {
+            val keystore = KeyStore.getInstance("AndroidKeyStore")
+            KeyGenerator.getInstance("AES", keystore.provider)
+                    .init(
+                            KeyGenParameterSpec.Builder("DUMMY_KEY_ALIAS", KeyProperties.PURPOSE_DECRYPT)
+                                    .setUserAuthenticationRequired(true)
+                                    .build()
+                    )
+            return true
+        } catch (e: InvalidAlgorithmParameterException) {
+            // expected error if user isn't enrolled in secure biometrics
+            return false
+        } catch (e: Exception) {
+            // Log unexpected errors, though if there's an issue with the keystore we probably can't use
+            // biometrics anyway.
+            Log.w("Biometricks", e)
+            return false
         }
     }
 }

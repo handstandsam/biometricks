@@ -1,6 +1,7 @@
 package com.handstandsam.biometricks
 
 import android.content.Context
+import android.hardware.fingerprint.FingerprintManager
 import androidx.annotation.MainThread
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
@@ -53,14 +54,16 @@ sealed class Biometricks {
 
         /**
          * Allows a client to query the type of Biometrics available on the device.
-         *
-         * It is recommended that you cache this value as it will
-         * not change over time, but it will be computed every time.
          */
-
         fun from(context: Context): Biometricks {
-            val biometricksHelper = biometricksHelper ?: BiometricksHelper(context)
-            return biometricksHelper.type
+            return biometricksHelper(context).type
+        }
+
+        private fun biometricksHelper(context: Context): BiometricksHelper {
+            val biometricksHelper = biometricksHelper ?: BiometricksHelper(context).also {
+                biometricksHelper = it
+            }
+            return biometricksHelper
         }
 
         /**
@@ -159,6 +162,20 @@ sealed class Biometricks {
                     ).authenticate(promptInfo.toAndroidX(), promptInfo.cryptoObject)
                 }
             }
+        }
+
+        /**
+         * Checks if we can securely authenticate, i.e. we have secure biometrics hardware and the user is
+         * enrolled. [androidx.biometric.BiometricManager.canAuthenticate] is unusable for this for a couple
+         * of reasons:
+         * 1. On api 28 it falls back to [FingerprintManager.hasEnrolledFingerprints] as the system method
+         * does not exist. However, there may still be non-fingerprint biometrics on those devices so it'll
+         * return a false-negative.
+         * 2. On api 29+ it checks for any form of biometrics, not just ones that are 'secure', so we can
+         * get a false-positive if the user is enrolled in an insecure form of biometrics.
+         */
+        fun canSecurelyAuthenticate(context: Context): Boolean {
+            return biometricksHelper(context).canSecurelyAuthenticate()
         }
     }
 }
