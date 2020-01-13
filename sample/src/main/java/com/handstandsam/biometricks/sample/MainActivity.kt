@@ -38,6 +38,12 @@ class MainActivity : FragmentActivity() {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val canAuthenticate = findViewById<Button>(R.id.launch_biometric)
+        canAuthenticate.isEnabled = Biometricks.canSecurelyAuthenticate(this)
+    }
+
     private fun showBiometricPrompt() {
         val biometricName = when (biometrick) {
             is Available -> {
