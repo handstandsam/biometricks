@@ -1,6 +1,7 @@
-# Biometricks - Tricks for Android Biometrics
+# PROJECT IS ARCHIVED as there is no reliable way to do this. Check related issue on the Google Issue Tracker https://issuetracker.google.com/issues/111315641
 
-**CURRENTLY IN DEVELOPMENT**
+
+# Biometricks - Tricks for Android Biometrics
 
 Provides various hacks/tricks to help work with the AndroidX Biometric APIs.
 
